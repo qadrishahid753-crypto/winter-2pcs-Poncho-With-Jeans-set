@@ -571,8 +571,8 @@ function submitOrder(e){
   const thankyou=document.getElementById("thankyouScreen");
   const content=document.getElementById("thankyouContent");
   const btn=form.querySelector(".placeorder");
-  if(GOOGLE_SHEETS_WEB_APP_URL==="https://script.google.com/macros/s/AKfycbxq3bL9RsRoLFdIaC63YlfSksMqX_BDvWoGnY12AEHu1G7pYae-R61Z8zvhkw7P9ePk6A/exec"){
-    alert("Google Sheets connection is not finished yet. Please add your Apps Script Web App URL in the HTML file.");
+  if(!GOOGLE_SHEETS_WEB_APP_URL || !/^https:\/\/script\.google\.com\/macros\/s\/[^\s]+\/exec$/.test(GOOGLE_SHEETS_WEB_APP_URL)){
+    alert("Google Sheets connection URL is missing or invalid. Please check the Apps Script Web App URL.");
     return;
   }
   const payload={
