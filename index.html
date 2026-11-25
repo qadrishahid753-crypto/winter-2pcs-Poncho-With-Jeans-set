@@ -551,7 +551,7 @@ function openCheckout(){if(!cart.length){alert("Your shopping bag is empty.");re
 function closeCheckout(){document.getElementById("checkoutModal").classList.remove("show");}
 
 // Paste your deployed Google Apps Script Web App URL here (must end in /exec).
-const GOOGLE_SHEETS_WEB_APP_URL = "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+const GOOGLE_SHEETS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxq3bL9RsRoLFdIaC63YlfSksMqX_BDvWoGnY12AEHu1G7pYae-R61Z8zvhkw7P9ePk6A/exec";
 
 function submitOrder(e){
   e.preventDefault();
@@ -571,7 +571,7 @@ function submitOrder(e){
   const thankyou=document.getElementById("thankyouScreen");
   const content=document.getElementById("thankyouContent");
   const btn=form.querySelector(".placeorder");
-  if(GOOGLE_SHEETS_WEB_APP_URL==="PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE"){
+  if(GOOGLE_SHEETS_WEB_APP_URL==="https://script.google.com/macros/s/AKfycbxq3bL9RsRoLFdIaC63YlfSksMqX_BDvWoGnY12AEHu1G7pYae-R61Z8zvhkw7P9ePk6A/exec"){
     alert("Google Sheets connection is not finished yet. Please add your Apps Script Web App URL in the HTML file.");
     return;
   }
