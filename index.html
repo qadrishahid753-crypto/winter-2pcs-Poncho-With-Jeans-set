@@ -241,6 +241,82 @@ footer{background:#211b1d;color:#fff;text-align:center;padding:28px 16px;font-si
  .detail-info-grid article{padding:14px}
 }
 
+
+/* Clear, readable poncho and jeans product descriptions */
+.product-description-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:18px 0 4px}
+.product-description-card{background:#fff8fa;border:1px solid #f0dce3;border-radius:14px;padding:17px 18px;color:#51464a}
+.product-description-card h3{margin:0 0 9px;color:#8f2948;font-size:17px}
+.product-description-card p{margin:0 0 9px;font-size:14px;line-height:1.65}
+.product-description-card ul{margin:8px 0 0;padding-left:19px}
+.product-description-card li{font-size:13px;line-height:1.7;margin:3px 0}
+.product-set-card{grid-column:1/-1}
+@media(max-width:520px){
+ .product-description-grid{grid-template-columns:1fr;gap:10px;margin-top:14px}
+ .product-description-card{padding:14px;border-radius:12px}
+ .product-description-card h3{font-size:16px}
+ .product-description-card p{font-size:13px;line-height:1.6}
+ .product-description-card li{font-size:12px;line-height:1.65}
+ .product-set-card{grid-column:auto}
+}
+
+
+/* Compact flash countdown */
+.flash-card{padding:8px 14px 9px!important;margin:8px auto 0!important;border-radius:10px!important}
+.flash-card .countdown{gap:5px!important}
+.flash-card .countdown div{padding:5px 3px 4px!important;border-radius:7px!important}
+.flash-card .countdown b{font-size:18px!important;line-height:1.05!important;letter-spacing:0!important}
+.flash-card .countdown small{font-size:7px!important;margin-top:3px!important;letter-spacing:.6px!important}
+@media(max-width:520px){
+ .flash-card{padding:6px 10px 7px!important;margin:6px 0 0!important;border-radius:8px!important}
+ .flash-card .countdown{gap:4px!important}
+ .flash-card .countdown div{padding:4px 2px 3px!important}
+ .flash-card .countdown b{font-size:16px!important}
+ .flash-card .countdown small{font-size:6px!important;margin-top:2px!important}
+}
+
+
+/* Show the complete poncho product photo without cropping */
+.heroimg{
+  width:100%!important;
+  height:auto!important;
+  aspect-ratio:auto!important;
+  object-fit:contain!important;
+  object-position:center center!important;
+  background:#fff!important;
+  max-height:720px;
+}
+@media(max-width:760px){
+  .heroimg{
+    width:100%!important;
+    height:auto!important;
+    aspect-ratio:auto!important;
+    object-fit:contain!important;
+    max-height:none!important;
+    border-radius:12px!important;
+  }
+}
+
+
+/* Keep the complete outfit visible in the product detail banners */
+.detail-look-card img{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  aspect-ratio:auto!important;
+  object-fit:contain!important;
+  object-position:center top!important;
+  background:#fff!important;
+}
+@media(max-width:520px){
+  .detail-look-card img{
+    width:100%!important;
+    height:auto!important;
+    aspect-ratio:auto!important;
+    object-fit:contain!important;
+    object-position:center top!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -288,6 +364,31 @@ footer{background:#211b1d;color:#fff;text-align:center;padding:28px 16px;font-si
 </div></section>
 <section class="section" id="size"><h2>Product Details & Size Guide</h2><p class="sub">Please check the measurements and select your jeans waist size before ordering.</p><div class="specs">
 <div class="specrow"><b>Poncho chest</b><span>36 inches</span></div><div class="specrow"><b>Poncho length</b><span>36 inches</span></div><div class="specrow"><b>Poncho colours</b><span>8 colour options</span></div><div class="specrow"><b>Jeans waist sizes</b><span>26, 28, 30, 32, 34, 36, 38, 40, 42</span></div><div class="specrow"><b>Set includes</b><span>1 printed winter poncho + 1 denim jeans</span></div><div class="specrow"><b>Product price</b><span>Rs. 2,300</span></div><div class="specrow"><b>Delivery</b><span>Rs. 200</span></div></div>
+<div class="product-description-grid">
+  <article class="product-description-card">
+    <h3>🧣 Poncho Details</h3>
+    <p>Is set mein printed winter fleece poncho shamil hai. Iska high-neck design, front par printed pattern aur neeche fringe finish outfit ko stylish look dete hain.</p>
+    <ul>
+      <li><b>Chest:</b> 36 inches</li>
+      <li><b>Length:</b> 36 inches</li>
+      <li><b>Available colours:</b> Black, Grey, Pink, Yellow, Maroon, Red, Navy Blue aur Sky Blue</li>
+    </ul>
+  </article>
+  <article class="product-description-card">
+    <h3>👖 Jeans Details</h3>
+    <p>Poncho ke saath matching outfit ke liye 1 denim jeans included hai. Order karte waqt apni waist measurement ke mutabiq size select karein.</p>
+    <ul>
+      <li><b>Available waist sizes:</b> 26, 28, 30, 32, 34, 36, 38, 40 aur 42</li>
+      <li><b>Style:</b> Denim jeans</li>
+      <li><b>Included:</b> 1 pair of jeans</li>
+    </ul>
+  </article>
+  <article class="product-description-card product-set-card">
+    <h3>📦 What You Will Receive</h3>
+    <p><b>1 Printed Winter Poncho + 1 Denim Jeans</b></p>
+    <p>Product price: <b>Rs. 2,300</b><br>Delivery charges: <b>Rs. 200</b><br>Total: <b>Rs. 2,500</b></p>
+  </article>
+</div>
 </section>
 
 <section class="section product-visual-details" id="product-looks">
