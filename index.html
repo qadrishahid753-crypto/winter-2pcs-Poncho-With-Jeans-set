@@ -358,6 +358,34 @@ footer{background:#211b1d;color:#fff;text-align:center;padding:28px 16px;font-si
  .header .nav a{font-size:12px;padding:6px 0;flex:0 0 auto}
 }
 
+
+/* Auto-sliding gallery for all eight poncho colours */
+.colour-carousel-section{max-width:1180px;margin:34px auto 38px;padding:0 22px}
+.colour-carousel-heading{text-align:center;margin-bottom:18px}
+.colour-carousel-heading h2{margin:7px 0 6px;font-family:Georgia,serif;color:#6b1e3b;font-size:28px}
+.colour-carousel-heading p{margin:0;color:#806d74;font-size:13px}
+.colour-carousel{display:grid;grid-template-columns:40px minmax(0,1fr) 40px;align-items:center;gap:10px}
+.colour-carousel-window{overflow:hidden;border-radius:16px}
+.colour-carousel-track{display:flex;transition:transform .55s ease;will-change:transform}
+.colour-slide{flex:0 0 25%;padding:7px;box-sizing:border-box}
+.colour-slide-card{height:100%;overflow:hidden;border:1px solid #efd8e1;border-radius:14px;background:#fff;box-shadow:0 5px 16px rgba(91,25,49,.07)}
+.colour-slide-card img{display:block;width:100%;height:250px;object-fit:contain;background:#fff8fa}
+.colour-slide-card b{display:block;text-align:center;padding:10px 5px;color:#762342;font-size:14px}
+.colour-carousel-arrow{width:38px;height:38px;border:1px solid #e7c2ce;border-radius:50%;background:#fff5f8;color:#7d2544;font-size:27px;line-height:1;cursor:pointer;box-shadow:0 3px 10px rgba(91,25,49,.08)}
+.colour-carousel-dots{display:flex;justify-content:center;gap:7px;margin-top:14px}
+.colour-carousel-dots button{width:8px;height:8px;padding:0;border:0;border-radius:50%;background:#e8c6d1;cursor:pointer}
+.colour-carousel-dots button.active{width:22px;border-radius:8px;background:#9a3157}
+@media(max-width:760px){
+ .colour-carousel-section{margin:25px auto 28px;padding:0 14px}
+ .colour-carousel-heading h2{font-size:23px}
+ .colour-carousel{grid-template-columns:30px minmax(0,1fr) 30px;gap:5px}
+ .colour-carousel-arrow{width:29px;height:29px;font-size:21px}
+ .colour-slide{flex-basis:50%;padding:5px}
+ .colour-slide-card img{height:190px}
+ .colour-slide-card b{font-size:12px;padding:8px 3px}
+}
+@media(max-width:380px){.colour-slide-card img{height:160px}}
+
 </style>
 </head>
 <body>
@@ -400,6 +428,21 @@ footer{background:#211b1d;color:#fff;text-align:center;padding:28px 16px;font-si
 <button class="add" onclick="addToCart()">ADD TO CART — Rs. 2,300</button><button class="buy" onclick="buyNow()">BUY IT NOW</button>
 <div class="trust"><div><b>🚚</b>Nationwide Delivery</div><div><b>💵</b>Cash on Delivery</div><div><b>♡</b>Easy Online Order</div></div>
 </div>
+</section>
+<section class="colour-carousel-section" aria-label="All poncho colours">
+  <div class="colour-carousel-heading">
+    <span class="eyebrow">FIND YOUR FAVOURITE SHADE</span>
+    <h2>Available in 8 Beautiful Colours</h2>
+    <p>Swipe or let the colour collection slide automatically</p>
+  </div>
+  <div class="colour-carousel">
+    <button class="colour-carousel-arrow prev" type="button" aria-label="Previous colour" onclick="moveColourSlide(-1)">‹</button>
+    <div class="colour-carousel-window">
+      <div class="colour-carousel-track" id="colourCarouselTrack"></div>
+    </div>
+    <button class="colour-carousel-arrow next" type="button" aria-label="Next colour" onclick="moveColourSlide(1)">›</button>
+  </div>
+  <div class="colour-carousel-dots" id="colourCarouselDots" aria-label="Choose a colour"></div>
 </section>
 <section class="activity-card activity-card-after-product" aria-label="Store activity sample">
   <div class="activity-top"><b>🔥 HURRY! FLASH OFFER IS LIVE</b><span>OFFER LIVE</span></div>
@@ -506,6 +549,10 @@ function openCart(){document.getElementById("drawer").classList.add("show");docu
 function closeCart(){document.getElementById("drawer").classList.remove("show");document.getElementById("overlay").classList.remove("show");}
 function openCheckout(){if(!cart.length){alert("Your shopping bag is empty.");return;}closeCart();let t=totals();document.getElementById("checkoutSummary").innerHTML=`${cart.map(x=>`<div class="checkout-product"><img src="${IMAGES[x.color]}" alt="${x.color} poncho"><div><b>Women's Printed Fleece Poncho With Jeans 2-Piece Set</b><small>Colour: ${x.color}<br>Jeans waist: ${x.size}" • Quantity: ${x.qty}<br>Product price: Rs. ${PRICE.toLocaleString()} × ${x.qty}</small></div></div>`).join("")}<div class="checkout-prices"><div class="sumrow"><span>Product Subtotal</span><b>Rs. ${t.sub.toLocaleString()}</b></div><div class="sumrow"><span>Delivery Charges</span><b>Rs. ${t.delivery.toLocaleString()}</b></div><div class="sumrow total"><span>Total Amount</span><b>Rs. ${t.total.toLocaleString()}</b></div></div>`;document.getElementById("checkoutModal").classList.add("show");}
 function closeCheckout(){document.getElementById("checkoutModal").classList.remove("show");}
+
+// Paste your deployed Google Apps Script Web App URL here (must end in /exec).
+const GOOGLE_SHEETS_WEB_APP_URL = "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+
 function submitOrder(e){
   e.preventDefault();
   if(!cart.length){alert("Your shopping bag is empty.");return;}
@@ -524,12 +571,33 @@ function submitOrder(e){
   const thankyou=document.getElementById("thankyouScreen");
   const content=document.getElementById("thankyouContent");
   const btn=form.querySelector(".placeorder");
+  if(GOOGLE_SHEETS_WEB_APP_URL==="PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE"){
+    alert("Google Sheets connection is not finished yet. Please add your Apps Script Web App URL in the HTML file.");
+    return;
+  }
+  const payload={
+    orderNumber,
+    orderDate:new Date().toISOString(),
+    customer,
+    items:orderItems,
+    productSubtotal:t.sub,
+    delivery:t.delivery,
+    total:t.total,
+    currency:"PKR"
+  };
   btn.disabled=true;
-  btn.textContent="PROCESSING...";
+  btn.textContent="SAVING ORDER...";
   processing.classList.add("show");
   closeCheckout();
 
-  setTimeout(()=>{
+  // Send as URL-encoded text to avoid a cross-origin JSON preflight with Apps Script.
+  const body=new URLSearchParams({payload:JSON.stringify(payload)});
+  fetch(GOOGLE_SHEETS_WEB_APP_URL,{
+    method:"POST",
+    mode:"no-cors",
+    headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"},
+    body:body.toString()
+  }).then(()=>{
     processing.classList.remove("show");
     const itemsHtml=orderItems.map(x=>`
       <div class="thankyou-item">
@@ -541,7 +609,7 @@ function submitOrder(e){
       <div class="thankyou-head">
         <div class="success-mark">✓</div>
         <h1>Thank You For Your Order!</h1>
-        <p>Your order details are ready. Please keep your order number for reference.</p>
+        <p>Your order has been sent to our order sheet. Please keep your order number for reference.</p>
         <b>Order #${orderNumber}</b>
       </div>
       <div class="thankyou-card"><h3>Order Summary</h3>${itemsHtml}
@@ -573,7 +641,12 @@ function submitOrder(e){
     form.reset();
     btn.disabled=false;
     btn.textContent="PLACE ORDER";
-  },2000);
+  }).catch(()=>{
+    processing.classList.remove("show");
+    btn.disabled=false;
+    btn.textContent="PLACE ORDER";
+    alert("Order could not be sent. Please try again or contact the store.");
+  });
 }
 function escapeHtml(value){
   return String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
@@ -595,6 +668,50 @@ function escapeHtml(value){
   };
   update();setInterval(update,1000);
 })();
+
+
+// All-colour carousel: auto-advances and supports arrows, dots and touch swiping.
+let colourCarouselIndex = 0;
+let colourCarouselTimer = null;
+function colourCarouselVisible(){
+  return window.matchMedia("(max-width:760px)").matches ? 2 : 4;
+}
+function renderColourCarousel(){
+  const track=document.getElementById("colourCarouselTrack");
+  const dots=document.getElementById("colourCarouselDots");
+  if(!track||!dots||typeof IMAGES==="undefined") return;
+  track.innerHTML=COLORS.map(c=>`<div class="colour-slide"><div class="colour-slide-card"><img src="${IMAGES[c]}" alt="${c} printed fleece poncho with jeans" loading="lazy"><b>${c}</b></div></div>`).join("");
+  dots.innerHTML=COLORS.map((c,i)=>`<button type="button" class="${i===colourCarouselIndex?'active':''}" aria-label="Show ${c}" onclick="goColourSlide(${i})"></button>`).join("");
+  updateColourCarousel();
+}
+function updateColourCarousel(){
+  const track=document.getElementById("colourCarouselTrack");
+  const dots=document.getElementById("colourCarouselDots");
+  if(!track||!dots) return;
+  const visible=colourCarouselVisible();
+  const maxIndex=Math.max(0,COLORS.length-visible);
+  colourCarouselIndex=Math.min(colourCarouselIndex,maxIndex);
+  track.style.transform=`translateX(-${colourCarouselIndex*(100/visible)}%)`;
+  [...dots.children].forEach((dot,i)=>dot.classList.toggle("active",i===colourCarouselIndex));
+}
+function moveColourSlide(direction){
+  const maxIndex=Math.max(0,COLORS.length-colourCarouselVisible());
+  colourCarouselIndex=(colourCarouselIndex+direction+maxIndex+1)%(maxIndex+1);
+  updateColourCarousel();
+  restartColourCarousel();
+}
+function goColourSlide(index){
+  colourCarouselIndex=Math.min(index,Math.max(0,COLORS.length-colourCarouselVisible()));
+  updateColourCarousel();
+  restartColourCarousel();
+}
+function restartColourCarousel(){
+  if(colourCarouselTimer) clearInterval(colourCarouselTimer);
+  colourCarouselTimer=setInterval(()=>moveColourSlide(1),3000);
+}
+window.addEventListener("resize",updateColourCarousel);
+document.addEventListener("DOMContentLoaded",()=>{renderColourCarousel();restartColourCarousel();});
+
 
 // Sample counters gently vary to create a live-style visual; they are not store analytics.
 (function startSampleActivity(){
